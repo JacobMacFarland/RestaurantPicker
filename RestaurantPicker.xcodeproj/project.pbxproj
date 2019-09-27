@@ -15,6 +15,8 @@
 		0058109822B1D8900075D1E9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0058109622B1D8900075D1E9 /* LaunchScreen.storyboard */; };
 		005810A322B1D8900075D1E9 /* RestaurantPickerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 005810A222B1D8900075D1E9 /* RestaurantPickerTests.swift */; };
 		005810AE22B1D8900075D1E9 /* RestaurantPickerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 005810AD22B1D8900075D1E9 /* RestaurantPickerUITests.swift */; };
+		00934B4B22B48B0F00A81867 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00934B4A22B48B0F00A81867 /* MapViewController.swift */; };
+		00934B4D22B49C4F00A81867 /* SearchInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00934B4C22B49C4F00A81867 /* SearchInfo.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +51,8 @@
 		005810A922B1D8900075D1E9 /* RestaurantPickerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RestaurantPickerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		005810AD22B1D8900075D1E9 /* RestaurantPickerUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestaurantPickerUITests.swift; sourceTree = "<group>"; };
 		005810AF22B1D8900075D1E9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		00934B4A22B48B0F00A81867 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
+		00934B4C22B49C4F00A81867 /* SearchInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchInfo.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -100,7 +104,9 @@
 			isa = PBXGroup;
 			children = (
 				0058108A22B1D88E0075D1E9 /* AppDelegate.swift */,
+				00934B4C22B49C4F00A81867 /* SearchInfo.swift */,
 				0058108C22B1D88E0075D1E9 /* ViewController.swift */,
+				00934B4A22B48B0F00A81867 /* MapViewController.swift */,
 				0058108E22B1D88E0075D1E9 /* Main.storyboard */,
 				0058109422B1D8900075D1E9 /* Assets.xcassets */,
 				0058109622B1D8900075D1E9 /* LaunchScreen.storyboard */,
@@ -261,7 +267,9 @@
 			files = (
 				0058108D22B1D88E0075D1E9 /* ViewController.swift in Sources */,
 				0058109322B1D88E0075D1E9 /* RestaurantPicker.xcdatamodeld in Sources */,
+				00934B4D22B49C4F00A81867 /* SearchInfo.swift in Sources */,
 				0058108B22B1D88E0075D1E9 /* AppDelegate.swift in Sources */,
+				00934B4B22B48B0F00A81867 /* MapViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -443,7 +451,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = None.RestaurantPicker;
+				PRODUCT_BUNDLE_IDENTIFIER = RestaurantPicker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -461,7 +469,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = None.RestaurantPicker;
+				PRODUCT_BUNDLE_IDENTIFIER = RestaurantPicker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
