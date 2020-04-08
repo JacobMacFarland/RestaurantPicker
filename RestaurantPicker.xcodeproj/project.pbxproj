@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		00200C0F243D224400035A6E /* sushi.png in Resources */ = {isa = PBXBuildFile; fileRef = 00200C0E243D224400035A6E /* sushi.png */; };
 		0058108B22B1D88E0075D1E9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0058108A22B1D88E0075D1E9 /* AppDelegate.swift */; };
 		0058108D22B1D88E0075D1E9 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0058108C22B1D88E0075D1E9 /* ViewController.swift */; };
 		0058109022B1D88E0075D1E9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0058108E22B1D88E0075D1E9 /* Main.storyboard */; };
@@ -37,6 +38,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		00200C0E243D224400035A6E /* sushi.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sushi.png; sourceTree = "<group>"; };
 		0058108722B1D88E0075D1E9 /* RestaurantPicker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RestaurantPicker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0058108A22B1D88E0075D1E9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0058108C22B1D88E0075D1E9 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -111,6 +113,7 @@
 				0058109422B1D8900075D1E9 /* Assets.xcassets */,
 				0058109622B1D8900075D1E9 /* LaunchScreen.storyboard */,
 				0058109922B1D8900075D1E9 /* Info.plist */,
+				00200C0E243D224400035A6E /* sushi.png */,
 				0058109122B1D88E0075D1E9 /* RestaurantPicker.xcdatamodeld */,
 			);
 			path = RestaurantPicker;
@@ -238,6 +241,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				00200C0F243D224400035A6E /* sushi.png in Resources */,
 				0058109822B1D8900075D1E9 /* LaunchScreen.storyboard in Resources */,
 				0058109522B1D8900075D1E9 /* Assets.xcassets in Resources */,
 				0058109022B1D88E0075D1E9 /* Main.storyboard in Resources */,
@@ -454,7 +458,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = RestaurantPicker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -472,7 +476,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = RestaurantPicker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

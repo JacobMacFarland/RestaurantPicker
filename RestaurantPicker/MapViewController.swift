@@ -16,12 +16,19 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
     
     var restaraunts = [[String:String]]()
 
+    var currentLat: CLLocationDegrees = 0
+    var currentLon: CLLocationDegrees = 0
     
     @IBOutlet weak var restaurantDetailView: UIView!
     @IBOutlet weak var mapView: MKMapView!
+    @IBOutlet weak var restaurantNameButtonImage: UIButton!
+    @IBOutlet weak var restaurantAddressButtonImage: UIButton!
+    @IBOutlet weak var restaurantPhoneButtonImage: UIButton!
+    
     @IBOutlet weak var restaurantNameLabel: UILabel!
     @IBOutlet weak var restaurantAddressLabel: UILabel!
-    @IBOutlet weak var restaurantPhoneNum: UILabel!
+    @IBOutlet weak var restaurantPhoneLabel: UILabel!
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -51,8 +58,8 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
     */
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         
-        var userInputLat = Double(SearchInfo.searchRadius) ?? 5.5
-        var userInputLon = Double(SearchInfo.searchRadius) ?? 5.5
+        let userInputLat = Double(SearchInfo.searchRadius) ?? 5.5
+        let userInputLon = Double(SearchInfo.searchRadius) ?? 5.5
         
         self.locationManager.stopUpdatingLocation()
         
@@ -95,18 +102,21 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
         }
         // Code you want to be delayed
         let request = MKLocalSearch.Request()
-        request.naturalLanguageQuery = (SearchInfo.foodType != "" ? SearchInfo.foodType: "sushi")
         
+        request.naturalLanguageQuery = (SearchInfo.foodType != "" ? (SearchInfo.foodType + " food") : self.pickRandomFoodType() + " food")
         request.region = self.mapView.region
-        
         
         let search = MKLocalSearch(request: request)
         
         search.start(completionHandler: {(response, error) in
-            if error != nil {
+            if error != nil || response!.mapItems.count == 0 {
+                
+                let alert = UIAlertController(title: "No Locations Found", message: "No locations were found with your search parameters.", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "Done", style: .default, handler: nil))
+                self.present(alert, animated: true, completion: nil)
+                //self.performSegue(withIdentifier: "mapToMain", sender: "Error: No restaurants with that name and radius found.")
                 print("Error occurred in search: \(error!.localizedDescription)")
-            } else if response!.mapItems.count == 0 {
-                print("No matches found")
+                
             } else {
                 print("Matches found")
                 
@@ -124,18 +134,48 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
                 
                 self.restaurantNameLabel.text = randomRestaraunt.name!
                 self.restaurantAddressLabel.text = randomRestarauntAddr
-                self.restaurantPhoneNum.text = randomRestaraunt.phoneNumber ?? "None"
+                self.restaurantPhoneLabel.text = randomRestaraunt.phoneNumber ?? "None"
                 
                 let randomRestarauntAnnotation: MKPointAnnotation = MKPointAnnotation()
-                randomRestarauntAnnotation.coordinate = CLLocationCoordinate2DMake(randomRestaraunt.placemark.coordinate.latitude, randomRestaraunt.placemark.coordinate.longitude);
+                self.currentLat = randomRestaraunt.placemark.coordinate.latitude
+                self.currentLon = randomRestaraunt.placemark.coordinate.longitude
+                randomRestarauntAnnotation.coordinate = CLLocationCoordinate2DMake(self.currentLat, self.currentLon)
                 randomRestarauntAnnotation.title = randomRestaraunt.name!
+                
                 self.mapView.addAnnotation(randomRestarauntAnnotation)
                 let region = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: randomRestaraunt.placemark.coordinate.latitude, longitude: randomRestaraunt.placemark.coordinate.longitude), span: MKCoordinateSpan(latitudeDelta: 0.025, longitudeDelta: 0.025))
                 self.mapView.setRegion(region, animated: true)
-                print(self.mapView.annotations)
             }
         })
     }
+    
+    /**
+          Can't call until tried out on real device
+     */
+    func callNumber(phoneNumber:String) {
+        
+        var pNum = phoneNumber.replacingOccurrences(of: "(", with: "")
+        pNum = pNum.replacingOccurrences(of: ")", with: "")
+        pNum = pNum.replacingOccurrences(of: " ", with: "")
+        pNum = pNum.replacingOccurrences(of: "-", with: "")
+        pNum.removeFirst()
+        pNum.removeLast()
+        
+        print(pNum)
+        
+        guard let number = URL(string: "tel://" + pNum) else {
+            print("Stupid idiot")
+            return }
+        UIApplication.shared.open(number)
+            
+    }
+    
+    /*override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "mapToMain" && sender is String {
+            let destination = segue.destination as! ViewController
+            destination.acct = sender as! String
+        }
+    }*/
     
     /**
         Description - Code for any setup of aesthetics not done in storyboard
@@ -149,7 +189,61 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
         Description - Button press that will choose random restaraunt
     */
     @IBAction func chooseRandomAction(_ sender: Any) {
-        getRandomRestaraunt()
+        self.getRandomRestaraunt()
     }
     
+    @IBAction func nameImageButtonTapped(_ sender: Any) {
+        self.openRestaurantURL(restaurantAddress: (self.restaurantAddressLabel.text! + self.restaurantNameLabel.text!))
+    }
+
+    @IBAction func mapImageButtonTapped(_ sender: Any) {
+        self.openMapForRestaurant(lat: currentLat, lon: currentLon, restaurantName: self.restaurantNameLabel.text!)
+    }
+
+    @IBAction func callImageButtonTapped(_ sender: Any) {
+        self.callAction()
+    }
+    
+    
+    func callAction() {
+        guard let phoneNumber = restaurantPhoneLabel.text else {
+            
+            let alert = UIAlertController(title: "No Phone Number", message: "Phone number for this restaurant is not on file.", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "No Phone Number", style: .default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+            
+            return
+        }
+        callNumber(phoneNumber: phoneNumber)
+    }
+    
+    func pickRandomFoodType() -> String {
+        let foodTypes = ["American", "Italian", "Asian"]
+        let randomIndex = Int.random(in: 0 ..< foodTypes.count)
+        return foodTypes[randomIndex]
+    }
+    
+    func openMapForRestaurant(lat: CLLocationDegrees, lon: CLLocationDegrees, restaurantName: String) {
+
+        let regionDistance: CLLocationDistance = 10000
+        let coordinates = CLLocationCoordinate2DMake(lat, lon)
+        let regionSpan = MKCoordinateRegion(center: coordinates, latitudinalMeters: regionDistance, longitudinalMeters: regionDistance)
+        let options = [
+            MKLaunchOptionsMapCenterKey: NSValue(mkCoordinate: regionSpan.center),
+            MKLaunchOptionsMapSpanKey: NSValue(mkCoordinateSpan: regionSpan.span)
+        ]
+        let placemark = MKPlacemark(coordinate: coordinates, addressDictionary: nil)
+        let mapItem = MKMapItem(placemark: placemark)
+        mapItem.name = restaurantName
+        mapItem.openInMaps(launchOptions: options)
+    }
+    
+    func openRestaurantURL(restaurantAddress: String) {
+        if let encoded = restaurantAddress.addingPercentEncoding(withAllowedCharacters: .urlFragmentAllowed), let url = URL(string: "https://www.google.com/#q=\(encoded)") {
+            if #available(iOS 10.0, *) {
+                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            } else {
+                UIApplication.shared.openURL(url)
+            }
+        }    }
 }

@@ -10,7 +10,7 @@ import UIKit
 import MapKit
 import CoreLocation
 
-class ViewController: UIViewController, CLLocationManagerDelegate {
+class ViewController: UIViewController, CLLocationManagerDelegate, UITextFieldDelegate {
     
     @IBOutlet weak var foodTypeTextField: UITextField!
     @IBOutlet weak var radiusTextField: UITextField!
@@ -23,31 +23,22 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        questionView.layer.cornerRadius = 8
-        questionView.layer.masksToBounds = true
+        setupQuestionView()
+        self.foodTypeTextField.delegate = self
+        self.radiusTextField.delegate = self
         
-        let border = CALayer()
-        let width = CGFloat(2.0)
-        border.borderColor = UIColor.darkGray.cgColor
-        border.frame = CGRect(x: 0, y: foodTypeTextField.frame.size.height - width, width: view.frame.size.width - 70, height: foodTypeTextField.frame.size.height)
-
-        border.borderWidth = width
-        foodTypeTextField.layer.addSublayer(border)
-        foodTypeTextField.layer.masksToBounds = true
-        foodTypeTextField.placeholder = "Food Type"
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(UIInputViewController.dismissKeyboard))
+        view.addGestureRecognizer(tap)
         
-        let border2 = CALayer()
-        border2.borderColor = UIColor.darkGray.cgColor
-        border2.frame = CGRect(x: 0, y: radiusTextField.frame.size.height - width, width: view.frame.size.width - 70, height: radiusTextField.frame.size.height)
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
         
-        border2.borderWidth = width
-        radiusTextField.layer.addSublayer(border2)
-        radiusTextField.layer.masksToBounds = true
-        radiusTextField.placeholder = "Radius (mi)"
-        
-        submitButton.layer.cornerRadius = 21
-        submitButton.layer.masksToBounds = true
+    }
+    
+    @objc func dismissKeyboard() {
+        //Causes the view (or one of its embedded text fields) to resign the first responder status.
+        view.endEditing(true)
     }
     
     @IBAction func submitButtonAction(_ sender: Any) {
@@ -57,6 +48,45 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
 
     }
     
+    func setupFoodTypeTextField() {
+        let border = CALayer()
+        let width = CGFloat(2.0)
+        border.borderColor = UIColor.darkGray.cgColor
+        border.frame = CGRect(x: 0, y: foodTypeTextField.frame.size.height - width, width: view.frame.size.width - 70, height: foodTypeTextField.frame.size.height)
+
+        border.borderWidth = width
+        foodTypeTextField.layer.addSublayer(border)
+        foodTypeTextField.layer.masksToBounds = true
+        foodTypeTextField.placeholder = "Food Type"
+        foodTypeTextField.returnKeyType = UIReturnKeyType.done
+    }
+    
+    func setupRadiusTextField() {
+        let border = CALayer()
+        let width = CGFloat(2.0)
+        border.borderColor = UIColor.darkGray.cgColor
+        border.frame = CGRect(x: 0, y: radiusTextField.frame.size.height - width, width: view.frame.size.width - 70, height: radiusTextField.frame.size.height)
+        
+        border.borderWidth = width
+        radiusTextField.layer.addSublayer(border)
+        radiusTextField.layer.masksToBounds = true
+        radiusTextField.placeholder = "Radius (mi)"
+        radiusTextField.returnKeyType = UIReturnKeyType.done
+    }
+    
+    func setupSubmitButton() {
+        submitButton.layer.cornerRadius = 21
+        submitButton.layer.masksToBounds = true
+    }
+    
+    func setupQuestionView() {
+        questionView.layer.cornerRadius = 8
+        questionView.layer.masksToBounds = true
+        
+        self.setupRadiusTextField()
+        self.setupFoodTypeTextField()
+        self.setupSubmitButton()
+    }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         self.locationManager.stopUpdatingLocation()
@@ -67,7 +97,11 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         print("Unable to access your current location")
     }
-
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        self.view.endEditing(true)
+        return false
+    }
 
 }
 
